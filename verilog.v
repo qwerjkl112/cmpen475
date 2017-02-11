@@ -27,8 +27,8 @@ output reg cout;
 output reg [127:0] s;
 wire c16, c32, c48, c64, c80, c96, c112, ccout;
 wire temp1, temp2, temp3, temp4, temp5, temp6, temp7, temp8;
-reg [128:0] s1, s2, s3, s4, s5, s6, s7, s8;
-reg c1, c2, c3, c4, c5, c6, c7, c8;
+reg [128:0] s1, s2, s3, s4, s5, s6, s7;
+reg c1, c2, c3, c4, c5, c6, c7;
 reg [127:0] rega, regb;
 wire [128:0] sum;
 always @ (posedge clk) 
@@ -42,8 +42,7 @@ begin
     s5 <= s4;
     s6 <= s5;
     s7 <= s6;
-    s8 <= s7;
-    s <= s8;
+    s <= s7;
     c1 <= ccout; 
     c2 <= c1;
     c3 <= c2;
@@ -51,8 +50,7 @@ begin
     c5 <= c4;
     c6 <= c5;
     c7 <= c6;
-    c8 <= c7;
-    cout <= c8;
+    cout <= c7;
 end 
 
     rip m1(sum[15:0], temp1, rega[15:0], regb[15:0], cin);
@@ -127,3 +125,74 @@ module ha(s,cout,a,b);
   xor m1(s,a,b);
   and m2(cout,a,b);
 endmodule
+
+///////////////////////////////////////////
+
+`timescale 1ns / 1ps
+//////////////////////////////////////////////////////////////////////////////////
+// Company: 
+// Engineer: 
+// 
+// Create Date: 02/08/2017 10:32:45 PM
+// Design Name: 
+// Module Name: test
+// Project Name: 
+// Target Devices: 
+// Tool Versions: 
+// Description: 
+// 
+// Dependencies: 
+// 
+// Revision:
+// Revision 0.01 - File Created
+// Additional Comments:
+// 
+//////////////////////////////////////////////////////////////////////////////////
+
+module test;
+    reg [127:0] a, b;
+    reg cin;
+    
+    wire [127:0] s;
+    wire cout;
+    
+    reg clk;
+    
+    rip128 uut(.s(s), .cout(cout), .a(a), .b(b), .cin(cin), .clk(clk));
+    
+    initial begin 
+    clk = 1;
+    end
+    always begin
+    #5 clk=0;
+    #5 clk=1;
+    end
+    
+    initial begin 
+    a = 0; b = 0; cin =1'b0;
+    #100
+    
+    a= 25; b= 25; cin=1'b0;
+    #10
+    a = 240; b = 1232; cin=1'b0;
+    #10
+    a = 32768; b = 85070592; cin=1'b0;
+    #10
+    a = 8696; b = 6758; cin=1'b0;
+    #10
+    a = 43; b = 978698; cin=1'b0;
+    #10
+    a = 12; b = 9; cin=1'b0;
+    #10
+    a = 987; b = 3456; cin=1'b0;
+    #10
+    a = 1287; b = 569; cin=1'b0;
+    end
+    
+   
+    
+    initial begin
+    $monitor("time= ", $time, " a = %d, b = %d, cin = %b, sum = %d, cout = %b", a, b, cin, s, cout);
+    end
+endmodule
+
